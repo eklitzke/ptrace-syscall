@@ -72,7 +72,7 @@ fail. Mystery solved.
 P.S. From the perspective of a tracer you can detect between the two states by
 inserting code like:
 
-```asm
+```gas
     call *%rax
     int3
 ```
