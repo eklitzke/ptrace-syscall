@@ -83,7 +83,24 @@ So if you try to call/jump to `PyEval_GetFrame` the SEGFAULT happens immediately
 on the first instruction; even if you try to single step you'll immediately
 fail. Mystery solved.
 
-P.S. From the perspective of a tracer you can detect between the two states by
+P.S. If you're familiar with x86 assembler you'll notice that the disassembly
+for this function looks incredibly strange -- not at all what you'd expect a
+compiler to emit. The reason the disassembly for this function looks so strange
+is because of Python's TLS implementation. Modern compilers have supported TLS
+natively for years now. I have no idea how it's implemented in a compiler like
+GCC, Clang, or MSVC++, but presumably they use a lot of magic and weird
+instrinsics to make TLS work super fast. However, when Python was written in the
+90s not all compilers supported TLS or supported it well, and therefore Python
+doesn't use any of the native TLS implementations. The version implemented by
+python uses some magical code in `Python/pystate.c` which is ultimately called
+by `Py_Initialize()` and `Py_Finalize()` (which are called by all threads). It
+works by basically ensuring that these methods alter a variable called
+`autoTLSkey` via some magic in `Python/thread.c`. Writing your own TLS
+implementation in the 90s might have been reasonable, but is sort of crazy now.
+There are a bunch of weird Python C anachronisms like this I've found that I'd
+like to write about in a blog post at some point.
+
+P.P.S. From the perspective of a tracer you can detect between the two states by
 inserting code like:
 
 ```gas
