@@ -36,7 +36,7 @@ process, etc.
 For posterity's sake, I will update this project if I am able to identify the
 circumstances where this code fails.
 
-# Conclusion: What Actually Happened
+## Conclusion: What Actually Happened
 
 The function I was trying to invoke was `PyEval_GetFrame()` which gets the
 current Python frame. This method is implemented by calling the unsafe method
@@ -73,8 +73,8 @@ P.S. From the perspective of a tracer you can detect between the two states by
 inserting code like:
 
 ```gas
-    call *%rax
-    int3
+call *%rax
+int3
 ```
 
 You would then use `ptrace(PTRACE_SETREGS, ...)` to set `%rax` to
