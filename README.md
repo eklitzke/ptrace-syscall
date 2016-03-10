@@ -3,7 +3,7 @@ This demonstrates a problem I am having when trying to call userspace code when
 To use:
 
     $ make
-    $ ./target  # first two arguments will be pid and func ptr
+    $ ./target  # first two arguments printed will be pid and func ptr
 
 Now in a second terminal:
 
