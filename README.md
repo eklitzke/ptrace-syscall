@@ -58,12 +58,14 @@ segfault.
 
 When you run Python as a REPL, it initializes itself in a very strange way --
 totally differently from how it works when you run a Python script. When invoked
-as a REPL it basically just enters a readline loop that uses `select()` to read
-characters from stdin, and then does the equivalent of calling `eval` on each
-line you enter. So at any given time, when the REPL is idle, there is actually
-no current threadstate and no current frame. If you want to know more details I
-recommend looking at the GDB backtrace of a REPL interpreter vs a script and you
-can see how they're initialized very differently.
+as a REPL it basically just enters a
+[readline](https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html) loop that
+uses `select()` to read characters from stdin, and then does the equivalent of
+calling `eval` on each line you enter. So at any given time, when the REPL is
+idle, there is actually no current threadstate and no current frame. If you want
+to know more details I recommend looking at the GDB backtrace of a REPL
+interpreter vs a script and you can see how they're initialized very
+differently.
 
 This was the root of my problem -- I was testing my code against a bare `python`
 REPL and not an actual Python script.
