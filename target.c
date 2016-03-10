@@ -2,9 +2,7 @@
 #include <unistd.h>
 #include <sys/select.h>
 
-void hello() {
-  fprintf(stderr, "hello\n");
-}
+void hello() { fprintf(stderr, "hello\n"); }
 
 int main(int argc, char **argv) {
   printf("%d %p\n", getpid(), hello);
@@ -12,5 +10,4 @@ int main(int argc, char **argv) {
     printf("entering infinite select...\n");
     select(0, NULL, NULL, NULL, NULL);
   }
-
 }
