@@ -91,13 +91,14 @@ natively for years now. I have no idea how it's implemented in a compiler like
 GCC, Clang, or MSVC++, but presumably they use a lot of magic and weird
 instrinsics to make TLS work super fast. However, when Python was written in the
 90s not all compilers supported TLS or supported it well, and therefore Python
-doesn't use any of the native TLS implementations. The version implemented by
-python uses some magical code in `Python/pystate.c` which is ultimately called
-by `Py_Initialize()` and `Py_Finalize()` (which are called by all threads). It
-works by basically ensuring that these methods alter a variable called
-`autoTLSkey` via some magic in `Python/thread.c`. Writing your own TLS
-implementation in the 90s might have been reasonable, but is sort of crazy now.
-There are a bunch of weird Python C anachronisms like this I've found that I'd
+doesn't use any of the native compiler-provided TLS implementations. The version
+implemented by Python uses some magical code in `Python/pystate.c` which is
+ultimately called by `Py_Initialize()` and `Py_Finalize()` (which are called
+during the paths that create and destroy Python threads). It works by basically
+ensuring that these methods alter a variable called `autoTLSkey` via some magic
+in `Python/thread.c`. Writing your own TLS implementation in the 90s might have
+been reasonable, but is sort of crazy now. There are a bunch of weird Python C
+anachronisms like this (ahem, Python memory management code) I've found that I'd
 like to write about in a blog post at some point.
 
 P.P.S. From the perspective of a tracer you can detect between the two states by
