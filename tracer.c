@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   }
 
   long addr = strtol(argv[2], NULL, 16);
-  printf("using pid %ld addr %x\n", pid, addr);
+  printf("using pid %ld addr %p\n", pid, (void*)addr);
   if (addr == LONG_MIN || addr == LONG_MAX) {
     printf("failed to decode addr %s in base 16", argv[2]);
     return 1;
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     perror("ptrace(PTRACE_GETREGS...)");
     return 1;
   }
-  printf("stoppped target at %rip = %p\n", old_regs.rip);
+  printf("stoppped target at %%rip = %p\n", (void*)old_regs.rip);
 
   long orig_word;
   errno = 0;
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
     printf("for some reason the target did not stop\n");
     return 1;
   }
-  printf("success!");
+  printf("success!\n");
 
   // reset the old program state
   if (ptrace(PTRACE_POKETEXT, pid, old_regs.rip, orig_word)) {

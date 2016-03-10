@@ -1,4 +1,4 @@
-CFLAGS := -g -O0 -std=c99 -D_XOPEN_SOURCE=700
+CFLAGS := -g -O0 -std=c99 -D_XOPEN_SOURCE=700 -Wall
 
 all: target tracer
 
