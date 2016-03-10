@@ -56,6 +56,18 @@ that simply evaluates to `_PyThreadStateCurrent`. Meaning if that if the
 variable is NULL and you try to access a field on it you will immediately
 segfault.
 
+When you run Python as a REPL, it initializes itself in a very strange way --
+totally differently from how it works when you run a Python script. When invoked
+as a REPL it basically just enters a readline loop that uses `select()` to read
+characters from stdin, and then does the equivalent of calling `eval` on each
+line you enter. So at any given time, when the REPL is idle, there is actually
+no current threadstate and no current frame. If you want to know more details I
+recommend looking at the GDB backtrace of a REPL interpreter vs a script and you
+can see how they're initialized very differently.
+
+This was the root of my problem -- I was testing my code against a bare `python`
+REPL and not an actual Python script.
+
 Because of how GCC optimizes the Python code, literally the first instruction of
 `PyEval_GetFrame` accesses `_PyThreadStateCurrent`. In fact, the entire method
 disassembles into this:
